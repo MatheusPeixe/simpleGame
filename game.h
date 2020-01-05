@@ -16,6 +16,7 @@
 //valores iniciais
 #define GOLD_INICIAL 100
 #define POCOES_INICIAL 3
+#define POCAO_VIDA 50
 
 //estruturas
 typedef struct {
@@ -44,3 +45,7 @@ typedef struct {
   int dano;
   int vida;
 } boss;
+
+//funções
+void utilizarPocao(player *player, classe classes[TOTAL_CLASSE]);
+void lerInformacoesJogador(player *jogador, classe classes[TOTAL_CLASSE]);

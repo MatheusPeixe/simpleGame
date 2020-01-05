@@ -1,0 +1,4 @@
+#!/bin/zsh
+gcc main.c game.c -o main
+# timeout 3 sleep 1
+./main
