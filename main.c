@@ -1,10 +1,12 @@
 #include<stdio.h>
+#include<stdlib.h>
+#include<locale.h>
 
 #define TOTAL_CLASSE 4
-#define CLASSE_ARQUEIRO 0
-#define CLASSE_GUERREIRO 1
-#define CLASSE_MAGO 2
-#define CLASSE_BARBARO 3
+#define CLASSE_ARQUEIRO 1
+#define CLASSE_GUERREIRO 2
+#define CLASSE_MAGO 3
+#define CLASSE_BARBARO 4
 
 typedef struct {
   char nickName[100];
