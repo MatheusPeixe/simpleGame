@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<locale.h>
 
+#define TOTAL_BOSSES 5
 #define TOTAL_CLASSE 4
 #define CLASSE_ARQUEIRO 1
 #define CLASSE_GUERREIRO 2
@@ -12,6 +13,12 @@ typedef struct {
   char nickName[100];
   int classe;
 } player;
+
+typedef struct {
+  char nome[50];
+  int dano;
+  int vida;
+} boss;
 
 int main(){
 	int classesDisponiveis[TOTAL_CLASSE] = {
@@ -27,6 +34,14 @@ int main(){
 		"Mago",
 		"Barbaro",
 	};
+
+  boss bosses[TOTAL_BOSSES] = {
+    {"Cleric Best", 50, 600},
+    {"Father Gascoigne", 70, 800},
+    {"Vicar Amelia", 80, 900},
+    {"One Reborn", 90, 1000},
+    {"Gehrman, The First Hunter", 100, 1500},
+  };
 
   setlocale(LC_ALL,"");
 
@@ -55,8 +70,6 @@ int main(){
       system("read -p \"Opção escolhida invalida\" saindo");
     }
   } while(classeEscolhidainvalida);
-
-  printf("jogador: %s escolheu a classe %s", jogador.nickName, classesDisponiveisTexto[jogador.classe]);
-
   return 0;
 }
+
