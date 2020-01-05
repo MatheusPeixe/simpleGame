@@ -1,5 +1,19 @@
 #include "game.h"
 
+void utilizarPocao(player *player, classe classes[TOTAL_CLASSE]) {
+  if (player->pocoes > 0) {
+    player->pocoes--;
+
+    player->vida += POCAO_VIDA;
+
+    if (player->vida > classes[player->classe].vidaInicial) {
+      player->vida = classes[player->classe].vidaInicial;
+    }
+  } else {
+    system("read -p \"Você não tem pocões no momento\" saindo");
+  }
+}
+
 void lerInformacoesJogador(player *jogador, classe classes[TOTAL_CLASSE]) {
   int i;
   printf("Como deseja ser chamado?(obs: maximo 100 caracteres)\n -->");
