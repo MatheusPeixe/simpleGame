@@ -45,3 +45,7 @@ typedef struct {
   int dano;
   int vida;
 } boss;
+
+//funções
+void utilizarPocao(player *player, classe classes[TOTAL_CLASSE]);
+void lerInformacoesJogador(player *jogador, classe classes[TOTAL_CLASSE]);
