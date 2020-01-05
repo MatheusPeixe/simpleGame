@@ -1,47 +1,14 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<locale.h>
-
-#define TOTAL_ITEM_CLASSE 5
-#define TOTAL_BOSSES 5
-#define TOTAL_CLASSE 4
-#define CLASSE_ARQUEIRO 1
-#define CLASSE_GUERREIRO 2
-#define CLASSE_MAGO 3
-#define CLASSE_BARBARO 4
-
-typedef struct {
-  char nickName[100];
-  int classe;
-} player;
-
-typedef struct {
-  char nome[50];
-  int dano;
-  int vida;
-} boss;
-
-typedef struct {
-  char nome[30];
-  int preco;
-  int danoBase;
-  int danoEspecial;
-} equipamento;
+#include "main.h"
 
 int main(){
-	int classesDisponiveis[TOTAL_CLASSE] = {
-		CLASSE_ARQUEIRO,
-		CLASSE_GUERREIRO,
-		CLASSE_MAGO,
-		CLASSE_BARBARO,
-	};
+  setlocale(LC_ALL,"");
 
-	char *classesDisponiveisTexto[TOTAL_CLASSE] = {
-		"Arquiero",
-		"Guerreiro",
-		"Mago",
-		"Barbaro",
-	};
+  classe classes[TOTAL_CLASSE] = {
+    {150, "Arqueiro"},
+    {230, "Guerreiro"},
+    {170, "Mago"},
+    {250, "Barbaro"},
+  };
 
   boss bosses[TOTAL_BOSSES] = {
     {"Cleric Best", 50, 600},
@@ -61,7 +28,7 @@ int main(){
   equipamento equipamentoArqueiro[TOTAL_ITEM_CLASSE] = {
     {"Arco Curvo", 100, 65, 100},
     {"Arco Longo", 160, 70, 110},
-    {"Besta de 2 Flecha", 300, 130, 150},
+    {"Bosta de 2 Flecha", 300, 130, 150},
     {"Arco Celeste", 330, 150, 160},
     {"Arco Sagrado", 500, 200, 200},
   };
@@ -90,8 +57,6 @@ int main(){
     {"Machado Estrela", 400, 100, 150},
   };
 
-  setlocale(LC_ALL,"");
-
   int i, j;
   player jogador;
 
@@ -105,18 +70,24 @@ int main(){
     printf("Escolha uma das classes disponiveis:\n");
 
     for(i = 0; i < TOTAL_CLASSE; i++) {
-      printf("\n%d - %s", i + 1, classesDisponiveisTexto[i]);
+      printf("\n%d - %s", i + 1, classes[i].nome);
     }
     printf("\n-->");
 
     scanf("%d", &jogador.classe);
-    jogador.classe--;
 
-    classeEscolhidainvalida = jogador.classe < 0 || jogador.classe > 4;
+    classeEscolhidainvalida = jogador.classe <= 0 || jogador.classe > 4;
+    jogador.classe--;
     if (classeEscolhidainvalida) {
       system("read -p \"Opção escolhida invalida\" saindo");
     }
   } while(classeEscolhidainvalida);
+
+  // inicialização do jogador
+  jogador.gold = GOLD_INICIAL;
+  jogador.pocoes = POCOES_INICIAL;
+  jogador.vida = classes[jogador.classe].vidaInicial;
+  jogador.equipamentoAtual = equipamentosInicial[jogador.classe];
+
   return 0;
 }
-
