@@ -6,6 +6,11 @@
 #define CLASSE_MAGO 2
 #define CLASSE_BARBARO 3
 
+typedef struct {
+  char nickName[100];
+  int classe;
+} player;
+
 int main(){
 	int classesDisponiveis[TOTAL_CLASSE] = {
 		CLASSE_ARQUEIRO,
