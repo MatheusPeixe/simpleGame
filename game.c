@@ -1,16 +1,22 @@
 #include "game.h"
 
-void utilizarPocao(player *player, classe classes[TOTAL_CLASSE]) {
-  if (player->pocoes > 0) {
-    player->pocoes--;
-
-    player->vida += POCAO_VIDA;
-
-    if (player->vida > classes[player->classe].vidaInicial) {
-      player->vida = classes[player->classe].vidaInicial;
+void utilizarPocao(player *jogador, classe classes[TOTAL_CLASSE]) {
+  if (jogador->pocoes > 0) {
+    if (jogador->vida >= classes[jogador->classe - 1].vidaInicial) {
+      printf("\nVocê já possui a vida maxima\n");
+      getchar();
+      return;
+    } else if (jogador->vida < classes[jogador->classe - 1].vidaInicial && (jogador->vida + POCAO_VIDA) > classes[jogador->classe - 1].vidaInicial){
+      jogador->vida = classes[jogador->classe - 1].vidaInicial;
+    } else {
+      jogador->vida += POCAO_VIDA;
     }
+    jogador->pocoes--;
+    printf("\nVocê usou uma poção, restantes %d\n", jogador->pocoes);
+    getchar();
   } else {
-    system("read -p \"Você não tem pocões no momento\" saindo");
+    printf("\nVocê não tem pocões no momento %d\n", jogador->pocoes);
+    getchar();
   }
 }
 
@@ -33,7 +39,6 @@ void lerInformacoesJogador(player *jogador, classe classes[TOTAL_CLASSE]) {
     scanf("%d", &jogador->classe);
 
     classeEscolhidainvalida = jogador->classe <= 0 || jogador->classe > 4;
-    // jogador->classe--;
     if (classeEscolhidainvalida) {
       system("read -p \"Opção escolhida invalida\" saindo");
     }
@@ -50,7 +55,12 @@ void exibirLoja(player *jogador, classe classes[TOTAL_CLASSE], equipamento todos
   int i, itemEscolhido;
 
   for (i = 0; i < TOTAL_ITEM_CLASSE; i++) {
-    printf("%d - %s       Preço: %d gold\n", i + 1, todosEquipamentos[jogador->classe - 1][i].nome, todosEquipamentos[jogador->classe - 1][i].preco);
+    printf("%d - %s(%d-%d)       Preço: %d gold\n", 
+    i + 1,
+    todosEquipamentos[jogador->classe - 1][i].nome,
+    todosEquipamentos[jogador->classe - 1][i].danoBase,
+    todosEquipamentos[jogador->classe - 1][i].danoEspecial,
+    todosEquipamentos[jogador->classe - 1][i].preco);
   }
   printf("%d - %s                   Preço: %d gold\n", i + 1, "Poção", PRECO_POCAO);
 
@@ -63,19 +73,50 @@ void exibirLoja(player *jogador, classe classes[TOTAL_CLASSE], equipamento todos
   }
 
   int escolheuPocao = itemEscolhido == i + 1;
-  int precoItemEscolhido = escolheuPocao ? PRECO_POCAO : todosEquipamentos[jogador->classe - 1][itemEscolhido - 1].preco;
+  int qtdPocoes;
+
+  if (escolheuPocao) {
+    system("clear");
+    printf("Classe: %s            Gold: %d\n\n", classes[jogador->classe - 1].nome, jogador->gold);
+    printf("\nQuantas poções?\n ->");
+    scanf("%d", &qtdPocoes);
+  }
+
+  int precoItemEscolhido = escolheuPocao ? (PRECO_POCAO * qtdPocoes) : todosEquipamentos[jogador->classe - 1][itemEscolhido - 1].preco;
+
+  system("clear");
 
   if (temGoldSuficiente(jogador->gold, precoItemEscolhido)) {
     jogador->gold -= precoItemEscolhido;
     if (escolheuPocao) {
-      jogador->pocoes++;
+      jogador->pocoes += qtdPocoes;
       printf("\nPoções: %d", jogador->pocoes);
     } else {
-      jogador->equipamentoAtual = todosEquipamentos[TOTAL_CLASSE][itemEscolhido - 1];
+      strcpy(jogador->equipamentoAtual.nome, todosEquipamentos[jogador->classe - 1][itemEscolhido - 1].nome);
+      jogador->equipamentoAtual.danoBase = todosEquipamentos[jogador->classe - 1][itemEscolhido - 1].danoBase;
+      jogador->equipamentoAtual.danoEspecial = todosEquipamentos[jogador->classe - 1][itemEscolhido - 1].danoEspecial;
     }
-    printf("\nItem Adiquirido!!");
+    printf("\nItem Adiquirido!!\n");
   } else {
-    printf("\nGold Insuficiente!!");
+    printf("\nGold Insuficiente!!\n");
   }
   printf("\nCarteira: %d", jogador->gold);
+  getchar();
+}
+
+void aplicarAtaqueNormal(int danoBase, boss *bossAtual) {
+  bossAtual->vida -= danoBase;
+  printf("\nVocê atacou o boss com %d de dano\n", danoBase);
+  getchar();
+}
+
+void aplicarAtaqueEspecial(int danoEspecial, boss *bossAtual) {
+  if (rand() % 100 <= 95) {
+    bossAtual->vida -= danoEspecial;
+    printf("\nVocê atacou o boss com %d de dano\n", danoEspecial);
+    getchar();
+  } else {
+    printf("\nO boss esquivou\n");
+    getchar();
+  }
 }
